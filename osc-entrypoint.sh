@@ -24,9 +24,12 @@ if [ -z "$CENTRIFUGO_CLIENT_TOKEN_HMAC_SECRET_KEY" ]; then
     fi
 fi
 
-# Admin password support
-if [ -z "$CENTRIFUGO_ADMIN_PASSWORD" ] && [ -n "$ADMIN_PASSWORD" ]; then
-    export CENTRIFUGO_ADMIN_PASSWORD="${ADMIN_PASSWORD}"
+# Admin UI support
+if [ -n "$ADMIN_PASSWORD" ] || [ -n "$CENTRIFUGO_ADMIN_PASSWORD" ]; then
+    export CENTRIFUGO_ADMIN=true
+    if [ -z "$CENTRIFUGO_ADMIN_PASSWORD" ]; then
+        export CENTRIFUGO_ADMIN_PASSWORD="${ADMIN_PASSWORD}"
+    fi
 fi
 
 # API key support
