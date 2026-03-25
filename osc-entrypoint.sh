@@ -24,11 +24,15 @@ if [ -z "$CENTRIFUGO_CLIENT_TOKEN_HMAC_SECRET_KEY" ]; then
     fi
 fi
 
-# Admin UI support
+# Admin UI support (Centrifugo v6 uses admin.enabled, admin.password, admin.secret)
 if [ -n "$ADMIN_PASSWORD" ] || [ -n "$CENTRIFUGO_ADMIN_PASSWORD" ]; then
-    export CENTRIFUGO_ADMIN=true
+    export CENTRIFUGO_ADMIN_ENABLED=true
     if [ -z "$CENTRIFUGO_ADMIN_PASSWORD" ]; then
         export CENTRIFUGO_ADMIN_PASSWORD="${ADMIN_PASSWORD}"
+    fi
+    # Admin secret is required for admin auth token signing
+    if [ -z "$CENTRIFUGO_ADMIN_SECRET" ]; then
+        export CENTRIFUGO_ADMIN_SECRET="${CENTRIFUGO_CLIENT_TOKEN_HMAC_SECRET_KEY}"
     fi
 fi
 
